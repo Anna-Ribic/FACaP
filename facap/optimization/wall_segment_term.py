@@ -30,7 +30,7 @@ class WallSegmentTerm(nn.Module):
 
     def forward(self):
         wall_pcd = self.unproject(self.wall["depths"], self.wall["points"], self.wall["camera_idxs"])
-        par_dist, ort_dst = point_segment_distance(wall_pcd[:, [0, 2]], self.wall["segments"])
+        par_dist, ort_dst = point_segment_distance(wall_pcd[:, [0, 1]], self.wall["segments"]) #TODO 01
         zeros = torch.zeros_like(par_dist)
 
         return self.distance_function(zeros, par_dist) + self.distance_function(zeros, ort_dst)

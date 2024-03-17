@@ -435,6 +435,7 @@ def read_model(path, ext=""):
         cameras = read_cameras_binary(os.path.join(path, "cameras" + ext))
         images = read_images_binary(os.path.join(path, "images" + ext))
         points3D = read_points3D_binary(os.path.join(path, "points3D") + ext)
+    print('colmappoints', len(points3D))
     return cameras, images, points3D
 
 

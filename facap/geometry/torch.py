@@ -1,7 +1,7 @@
 import torch
 
 
-def unproject_points_rotvec(depths, yxs, f, pp, rotvec, translation, scale=1000):
+def unproject_points_rotvec(depths, yxs, f, pp, rotvec, translation, scale=1):
     """
     Unprojects a given depth map into a point cloud with inverse extrinsics.
 

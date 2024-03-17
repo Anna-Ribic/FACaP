@@ -14,17 +14,21 @@ def fit_plane(pcd):
 
 
 class FloorTerm(nn.Module):
-    def __init__(self, floor, unproject, distance_function):
+    def __init__(self, floor, unproject, distance_function, bim_floor=None):
         super(FloorTerm, self).__init__()
         self.floor = floor
         self.unproject = unproject
 
-        self.plane = self.get_initial_plane()
+        self.plane = self.get_initial_plane(bim_floor)
         self.distance_function = distance_function
 
-    def get_initial_plane(self):
+    def get_initial_plane(self, bim_floor):
         with torch.no_grad():
-            floor_pcd = self.unproject(self.floor["depths"], self.floor["points"], self.floor["camera_idxs"])
+            if bim_floor is None:
+                floor_pcd = self.unproject(self.floor["depths"], self.floor["points"], self.floor["camera_idxs"])
+            else:
+                floor_pcd = bim_floor.to('cuda:0')
+            print('FLOORPCD', floor_pcd.shape)
             normed_coefs = fit_plane(floor_pcd)
             return normed_coefs
 

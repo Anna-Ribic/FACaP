@@ -40,7 +40,7 @@ def project_points(pcd, extrinsic, f, pp, width, height):
     viewer.update_renderer()
     depth = viewer.capture_depth_float_buffer()
     viewer.destroy_window()
-    depth = (np.asarray(depth).astype(np.float32) * 1000).astype(np.uint16)
+    depth = (np.asarray(depth).astype(np.float32)).astype(np.uint16)
     return depth
 
 
@@ -75,9 +75,9 @@ def unproject_points(depth_map, color_map, extrinsic, f, pp, width, height):
     camera = o3d.camera.PinholeCameraIntrinsic()
     camera.set_intrinsics(width, height, f[0], f[1], pp[0], pp[1])
     color = o3d.geometry.Image(color_map)
-    depth = o3d.geometry.Image(depth_map)
+    depth = o3d.geometry.Image(depth_map.astype(np.float32))
     rgbd = o3d.geometry.RGBDImage.create_from_color_and_depth(color, depth,
-                                                              convert_rgb_to_intensity=False)
+                                                              convert_rgb_to_intensity=False, depth_scale=1)
     pcd = o3d.geometry.PointCloud.create_from_rgbd_image(rgbd, camera, extrinsic)
     return pcd
 

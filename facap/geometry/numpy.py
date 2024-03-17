@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def project_points(pcd, f, pp, extrinsic, height, width, scale=1000):
+def project_points(pcd, f, pp, extrinsic, height, width, scale=1):
     """
     Projects a given point cloud to 2d according to camera's pose.
 
@@ -54,7 +54,7 @@ def project_points(pcd, f, pp, extrinsic, height, width, scale=1000):
     return depth_map, valid_ids
 
 
-def unproject_points(depth_map, coords_2d, f, pp, inv_extrinsic, scale=1000):
+def unproject_points(depth_map, coords_2d, f, pp, inv_extrinsic, scale=1):
     """
     Unprojects a given depth map into a point cloud with inverse extrinsics.
 
@@ -96,7 +96,7 @@ def unproject_points(depth_map, coords_2d, f, pp, inv_extrinsic, scale=1000):
     return coords_world[:, :3, 0]
 
 
-def unproject_points_rotvec(depths, yxs, f, pp, rotvec, translation, scale=1000):
+def unproject_points_rotvec(depths, yxs, f, pp, rotvec, translation, scale=1):
     """
     Unprojects a given depth map into a point cloud with inverse extrinsics.
 

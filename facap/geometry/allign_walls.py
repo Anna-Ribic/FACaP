@@ -101,10 +101,11 @@ def unite_walls(walls, iou_thr=0.8, colin_thr=0.8):
         walls.append(wall)
     return walls
 
-
+#TODO look here
 def reorder_wall(wall, segment2wall, floorplan):
     indexes = []
     segments = []
+    print('wallreoder',wall)
     for segment_id, w in segment2wall.items():
         indexes.append(w["indexes"])
         segments.append(np.stack([floorplan[segment_id]] * len(w["indexes"])))
@@ -112,6 +113,7 @@ def reorder_wall(wall, segment2wall, floorplan):
     segments = np.concatenate(segments)
 
     for key in wall:
+        print('keyindex',key, indexes)
         wall[key] = wall[key][indexes]
     wall["segments"] = segments
     return wall
@@ -120,7 +122,7 @@ def reorder_wall(wall, segment2wall, floorplan):
 def get_aligned_walls(walls, floorplan):
     plane2walls = {}
     for i, w in enumerate(walls):
-        wall_pcd = np.asarray(w["pcd"].points)[:, [0, 2]]
+        wall_pcd = np.asarray(w["pcd"].points)[:, [0, 1]] #TODO 0,2
         idx, distance = find_nearest_segment(floorplan, wall_pcd)
         if idx not in plane2walls:
             plane2walls[idx] = [w, ]
@@ -132,15 +134,15 @@ def get_aligned_walls(walls, floorplan):
     return plane2walls
 
 
-def align_walls(wall_data, floorplan):
+def align_walls(wall_data, floorplan, scale=1):
     walls_pcd = unproject_points_rotvec(wall_data["depths"], wall_data["points"], wall_data["f"], wall_data["pp"],
-                                        wall_data["rotvecs"], wall_data["translations"])
+                                        wall_data["rotvecs"], wall_data["translations"], scale=scale)
     walls_pcd = make_pcd_from_numpy(walls_pcd, np.array([0, 1, 0]))
 
     indexes = np.arange(len(walls_pcd.points))
     normals = np.asarray(walls_pcd.normals)
-    vertical_component_condition = np.abs(normals[..., 1]) < 0.3
-    norm_proj = normals[..., [0, 2]][vertical_component_condition]
+    vertical_component_condition = np.abs(normals[..., 2]) < 0.3 # TODO normal 1
+    norm_proj = normals[..., [0, 1]][vertical_component_condition] #TODO normals 2
 
     angles = np.arctan(norm_proj[..., 1] / (1e-10 + norm_proj[..., 0]))
     counts, bins = np.histogram(angles, bins=360)
@@ -150,7 +152,7 @@ def align_walls(wall_data, floorplan):
     for peak in peaks[0]:
         alpha = (bins[peak] + bins[peak + 1]) / 2
 
-        angle_condition = np.abs((np.arctan(normals[..., 2] / (normals[..., 0] + 1e-10))) - alpha) < .1
+        angle_condition = np.abs((np.arctan(normals[..., 1] / (normals[..., 0] + 1e-10))) - alpha) < .1 #TODO normals 2
         condition = vertical_component_condition & angle_condition
         mask = np.where(condition)[0]
         filtered_by_normals = walls_pcd.select_by_index(mask)
@@ -159,5 +161,6 @@ def align_walls(wall_data, floorplan):
 
     walls = unite_walls(walls, iou_thr=0.7)
     plane2walls = get_aligned_walls(walls, floorplan)
+    #print('plane2walls', len(plane2walls), plane2walls)
     wall_data = reorder_wall(wall_data, plane2walls, floorplan)
     return wall_data

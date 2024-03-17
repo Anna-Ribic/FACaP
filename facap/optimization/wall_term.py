@@ -34,7 +34,7 @@ class WallTerm(nn.Module):
 
     def forward(self):
         wall_pcd = self.unproject(self.wall["depths"], self.wall["points"], self.wall["camera_idxs"])
-        distances = nearest_segment_distance(self.floorplan, wall_pcd[:, [0, 2]])
+        distances = nearest_segment_distance(self.floorplan, wall_pcd[:, [0, 1]]) #TODO 01
         zeros = torch.zeros_like(distances)
 
         return self.distance_function(zeros, distances)
