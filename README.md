@@ -46,10 +46,12 @@ All scans should be preprocessed to the next structure:
 ```
 scan
 │   floorplan.npy
+|   floorplane.ply
+|   ceiling.ply
 │   db.h5
 │
 └───arcore
-│   │   cam_params-0001.txt
+│   │   cam_params.txt
 │   │   ...
 │   │   depth-0001.png
 │   │   ...
@@ -64,19 +66,27 @@ scan
 │   │   ...
 │   │   frame-0001_floor.png
 │   │   ...
+│   │   frame-0001_ceiling.png
+│   │   ...
+│   │   frame-0001_columns.png
 │  
 
 ```
 
 Here:
 - `floorplan.npy` is an array with the shape `n x 4`. Each element is a segment of the floorplan.
+- `floorplane.ply` is a pointcloud of the floor in the BIM model.
+- `ceiling.ply` is a pointcloud of the ceiling in the BIM model.
 - `db.h5` features a database in COLMAP format, which is used to map covisible points. 
-- `cam_params-0001.txt` intrinsics of the corresponding camera (w, h, f1, f1, p1, p2).
+- `cam_params.txt` intrinsics of the corresponding camera (w, h, f1, f1, p1, p2).
 - `pose-0001.txt` extrinsic matrix of the corresponding camera
-- `depth-0001.png` depth map
+- `depth-0001.npy` depth map
 - `frame-0001.png` RGB frame
-- `frame-0001_wall.png` rotated mask of walls for the corresponding frame
-- `frame-0001_floor.png` rotated mask of the floor for the corresponding frame
+- `frame-0001_wall.png` mask of walls for the corresponding frame
+- `frame-0001_floor.png` mask of the floor for the corresponding frame
+- `frame-0001_ceiling.png` mask of the ceiling for the corresponding frame
+- `frame-0001_columns.png` rotated mask of the columns for the corresponding frame
+
 
 For more details please see the file `facap/data/scan.py`.
 
