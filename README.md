@@ -1,4 +1,4 @@
-# BIMCap
+# BIMCaP
 
 This repository contains an modified implementation of Floorplan-Aware Camera Poses Refinement paper, which was presented on 
 IROS 2022. 
