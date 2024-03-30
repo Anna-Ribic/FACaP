@@ -1,6 +1,6 @@
-# FACaP
+# BIMCap
 
-This repository contains an implementation of Floorplan-Aware Camera Poses Refinement paper, which was presented on 
+This repository contains an modified implementation of Floorplan-Aware Camera Poses Refinement paper, which was presented on 
 IROS 2022. 
 
 > **Floorplan-Aware Camera Poses Refinement**<br>
@@ -14,25 +14,19 @@ IROS 2022.
 
 ## Introduction
 
-
-For many indoor scenes, there exists an image of a technical
-floorplan that contains information about the geometry and 
-main structural elements of the scene, such as walls, 
-partitions, and doors. We argue that such a floorplan is 
-a useful source of spatial information, which can guide 
-a 3D model optimization.
-
-The standard RGB-D 3D reconstruction pipeline consists of
-a tracking module applied to an RGB-D sequence and a bundle
-adjustment (BA) module that takes the posed RGB-D sequence and
-corrects the camera poses to improve consistency. We propose
-a novel optimization algorithm expanding conventional BA that
-leverages the prior knowledge about the scene structure in
-the form of a floorplan. Our experiments on the Redwood
-dataset and our self-captured data demonstrate that utilizing
-floorplan improves accuracy of 3D reconstructions.
+This paper introduces a method conceived to overcome the challenge of integrating mobile 3D sparse LiDAR data and camera measurements with pre-existing building information models (BIM models). This enhancement is crucial for fast and accurate mapping conducted with affordable sensors within indoor environments. 
+Our proposed framework, termed BIMCaP, presents a novel approach for automatic sensor pose refinement, leveraging a reference 3D BIM model. 
+Central to our methodology is the application of a bundle adjustment technique, which seamlessly aligns semantically enhanced measurements from the real world with a BIM model. 
+Through experimentation on real-world open-access data, we demonstrate the superior accuracy of our framework, surpassing current state-of-the-art methods. 
+BIMCaP holds significant promise for enhancing the efficiency and cost-effectiveness of 3D mapping methodologies. 
+This advancement carries substantial advantages across various domains, such as in construction site management and emergency response, where up-to-date digital maps facilitate better decision-making and enhanced productivity.
 
 ![](imgs/pipeline.png)
+
+We enhance the original FACaP pipeline shown above by leveraging a BIM-model.
+
+![](imgs/bimfloor.png)
+
 
 
 ## Installation
@@ -48,7 +42,13 @@ scan
 │   floorplan.npy
 |   floorplane.ply
 |   ceiling.ply
-│   db.h5
+│   
+└───db
+│   └───sparse
+│       └───0
+|           |   cameras.bin
+|           |   images.bin
+|           |   points3D.bin
 │
 └───arcore
 │   │   cam_params.txt
@@ -77,7 +77,7 @@ Here:
 - `floorplan.npy` is an array with the shape `n x 4`. Each element is a segment of the floorplan.
 - `floorplane.ply` is a pointcloud of the floor in the BIM model.
 - `ceiling.ply` is a pointcloud of the ceiling in the BIM model.
-- `db.h5` features a database in COLMAP format, which is used to map covisible points. 
+- `db` features a database in COLMAP format, which is used to map covisible points. 
 - `cam_params.txt` intrinsics of the corresponding camera (w, h, f1, f1, p1, p2).
 - `pose-0001.txt` extrinsic matrix of the corresponding camera
 - `depth-0001.npy` depth map
@@ -104,7 +104,7 @@ The example of the config can be found in the path `experiments/config.yaml`.
 
 ### Citation
 
-If you find this work useful for your research, please cite our paper:
+If you find this work useful for your research, please cite the FACaP paper:
 ```
 @INPROCEEDINGS{9981148,
   author={Sokolova, Anna and Nikitin, Filipp and Vorontsova, Anna and Konushin, Anton},
