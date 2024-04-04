@@ -88,7 +88,7 @@ Here:
 - `frame-0001_columns.png` rotated mask of the columns for the corresponding frame
 
 
-For more details please see the file `facap/data/scan.py`.
+For more details please see the file `facap/data/scan.py`. An example scan folder can be found [here](https://github.com/Anna-Ribic/camera_refinement_BIM/tree/main/scan_lowres)
 
 ## Usage
 
