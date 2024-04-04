@@ -77,7 +77,7 @@ Here:
 - `floorplan.npy` is an array with the shape `n x 4`. Each element is a segment of the floorplan.
 - `floorplane.ply` is a pointcloud of the floor in the BIM model.
 - `ceiling.ply` is a pointcloud of the ceiling in the BIM model.
-- `db` features a database in COLMAP format, which is used to map covisible points. 
+- `db` features a database in COLMAP format, which is used to map covisible points. This can be computed from the image frames using the [COLMAP](https://colmap.github.io/cli.html) automatic reconstructor.
 - `cam_params.txt` intrinsics of the corresponding camera (w, h, f1, f1, p1, p2).
 - `pose-0001.txt` extrinsic matrix of the corresponding camera
 - `depth-0001.npy` depth map

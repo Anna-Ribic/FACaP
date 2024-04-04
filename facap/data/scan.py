@@ -305,12 +305,12 @@ class Scan:
         apply_mask(left, keypoint_mask)
         apply_mask(right, keypoint_mask)
 
-        floor_pcd_vert = unproject(floor)[:, 1]
+        floor_pcd_vert = unproject(floor)[:, 2]
         floor_mask = (floor_pcd_vert > np.percentile(floor_pcd_vert, floor_percentiles[0])) & \
                      (floor_pcd_vert < np.percentile(floor_pcd_vert, floor_percentiles[1]))
         apply_mask(floor, floor_mask)
 
-        ceiling_pcd_vert = unproject(ceiling)[:, 1]
+        ceiling_pcd_vert = unproject(ceiling)[:, 2]
         ceiling_mask = (ceiling_pcd_vert > np.percentile(ceiling_pcd_vert, floor_percentiles[0])) & \
                      (ceiling_pcd_vert < np.percentile(ceiling_pcd_vert, floor_percentiles[1]))
         apply_mask(ceiling, ceiling_mask)
